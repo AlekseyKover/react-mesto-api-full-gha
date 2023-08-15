@@ -1,0 +1,7 @@
+.popup__image-check{
+    display: flex;
+    justify-content: center;
+    min-width: 120px;
+    min-height: 120px;
+    margin: 0 auto;
+}
