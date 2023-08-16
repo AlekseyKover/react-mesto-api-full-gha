@@ -17,25 +17,18 @@ const getUsers = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+
+  bcrypt.hash(String(password), 10)
     .then((hasHedPassword) => {
       User.create({
-        name: req.body.name,
-        password: hasHedPassword,
-        about: req.body.about,
-        avatar: req.body.avatar,
-        email: req.body.email,
-        _id: req.body._id,
+        name, about, avatar, email, password: hasHedPassword,
       })
 
         .then((user) => {
-          res.send({
-            name: user.name,
-            about: user.about,
-            avatar: user.avatar,
-            email: user.email,
-            _id: user._id,
-          });
+          res.send({ user });
         })
         .catch((err) => {
           if (err.name === 'ValidationError') {

@@ -79,12 +79,10 @@ class Api {
 }
 
 const api = new Api({
-    
-    address: "https://alekskover.nomoreparties.co",
+    baseUrl: 'https://api.alekskover.nomoreparties.co',
     headers: {
-      "Content-Type": "application/json",
+        'content-type': 'application/json'
     }
- 
 });
 
 export default api;

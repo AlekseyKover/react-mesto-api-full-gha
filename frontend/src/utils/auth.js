@@ -1,6 +1,6 @@
 class Auth {
   constructor(options) {
-    this._baseUrl = options.baseUrl;
+    this._baseUrl = options;
 
     this._getJSON = function (res) {
       if (res.ok) {
@@ -46,11 +46,6 @@ class Auth {
   }
 }
 
-const auth = new Auth({
-  baseUrl: 'https://api.alekskover.nomoreparties.co',
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const auth = new Auth('https://api.alekskover.nomoreparties.co');
 
 export default auth;
