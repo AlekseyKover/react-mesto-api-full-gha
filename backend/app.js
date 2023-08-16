@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const auth = require('./middlwares/auth');
 const { createUser, login } = require('./controllers/users');
 const error = require('./middlwares/error');
@@ -14,6 +15,7 @@ const { requestLogger, errorLogger } = require('./middlwares/logger');
 
 const { PORT = 3001 } = process.env;
 const app = express();
+app.use(cors({ origin: ['https://alekskover.nomoreparties.co'], credentials: true, maxAge: 30 }));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
