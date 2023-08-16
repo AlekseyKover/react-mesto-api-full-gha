@@ -49,10 +49,10 @@ function App() {
       });
   }
 
-  function handleRegister(reg) {
+  function handleRegister(email,password ) {
    
     auth
-      .register(reg.email, reg.password)
+      .register(email,password)
       
       .then((res) => {
         if (res) {

@@ -10,14 +10,14 @@ class Auth {
     };
   }
 
-  register(email, password) {
+  register(password,email) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: {
         
         "Content-Type": "application/json"
       },
-       body: JSON.stringify({ email, password }),
+       body: JSON.stringify({ password, email}),
     }).then((res) => this._getJSON({res}));
   }
 
