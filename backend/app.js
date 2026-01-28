@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
-const cors = require('cors');
 const auth = require('./middlwares/auth');
 const { createUser, login } = require('./controllers/users');
 const error = require('./middlwares/error');
@@ -47,11 +46,20 @@ mongoose.connect(mongoUrl)
 
 const app = express();
 
-// CORS. Разрешаем запросы с любого origin, но только с куками.
-app.use(cors({
-  origin: true, // origin будет автоматически отражён в заголовке Access-Control-Allow-Origin
-  credentials: true,
-}));
+// Явная настройка CORS, в том числе для preflight OPTIONS
+app.use((req, res, next) => {
+  const origin = req.headers.origin || '*';
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  return next();
+});
 
 app.use(express.json());
 app.use(bodyParser.json());
