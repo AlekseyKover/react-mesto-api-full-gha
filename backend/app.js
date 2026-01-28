@@ -1,4 +1,10 @@
-require('dotenv').config(); // Подключаем .env в начале
+// Подключаем .env в разработке, в продакшене (Render) переменные приходят из окружения
+try {
+  // eslint-disable-next-line global-require
+  require('dotenv').config();
+} catch (e) {
+  // Если dotenv не установлен (например, на Render), просто игнорируем
+}
 
 const express = require('express');
 const mongoose = require('mongoose');
