@@ -13,7 +13,8 @@ const ErrorNotFound = require('./errors/ErrorNotFound');
 const { links } = require('./utils/links');
 const { requestLogger, errorLogger } = require('./middlwares/logger');
 
-const { PORT = 3001 } = process.env;
+const PORT = process.env.PORT || 3001;
+
 const app = express();
 app.use(cors({
   origin: ['https://alekskover.nomoreparties.co', 'http://localhost:3000'],
@@ -24,18 +25,28 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-mongoose.connection.on('connected', () => {
-  // eslint-disable-next-line no-console
-  console.log('MongoDB connected');
-});
-mongoose.connection.on('error', (err) => {
-  // eslint-disable-next-line no-console
-  console.error('MongoDB connection error:', err.message);
-});
+mongoose.connect(MONGO_URL)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
+  });
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
-  useNewUrlParser: true,
-});
+
+const { MONGO_URL } = process.env;
+
+if (!MONGO_URL) {
+  console.error('❌ MONGO_URL is not defined');
+  process.exit(1);
+}
+
+mongoose.connect(MONGO_URL)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
+  });
+
 app.use(requestLogger);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
