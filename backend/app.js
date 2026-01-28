@@ -65,6 +65,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(requestLogger);
 
+// Публичный healthcheck (для Render/проверок)
+app.get('/health', (req, res) => {
+  res.status(200).send({ status: 'ok' });
+});
+
 // Роуты авторизации
 app.post('/signup', celebrate({
   body: Joi.object().keys({
