@@ -47,16 +47,9 @@ mongoose.connect(mongoUrl)
 
 const app = express();
 
-// Разрешённые origin'ы для CORS:
-// - локальная разработка
-// - фронтенд на Render (CLIENT_ORIGIN)
-const allowedOrigins = [
-  'http://localhost:3000',
-  CLIENT_ORIGIN,
-].filter(Boolean);
-
+// CORS. Разрешаем запросы с любого origin, но только с куками.
 app.use(cors({
-  origin: allowedOrigins,
+  origin: true, // origin будет автоматически отражён в заголовке Access-Control-Allow-Origin
   credentials: true,
 }));
 
