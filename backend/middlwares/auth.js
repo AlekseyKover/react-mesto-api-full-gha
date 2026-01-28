@@ -2,9 +2,11 @@
 const jwt = require('jsonwebtoken');
 const TokenError = require('../errors/TokenError');
 
+const { JWT_SECRET = 'dev-secret' } = process.env;
+
 const auth = (req, res, next) => {
   let token = req.cookies.jwt;
-  
+
   // Если токена нет в cookies, проверяем заголовок Authorization
   if (!token) {
     const authHeader = req.headers.authorization;
@@ -12,7 +14,7 @@ const auth = (req, res, next) => {
       token = authHeader.substring(7);
     }
   }
-  
+
   if (!token) {
     next(new TokenError('Необходима авторизация'));
     return;
@@ -20,7 +22,7 @@ const auth = (req, res, next) => {
 
   let playload;
   try {
-    playload = jwt.verify(token, 'SECRET');
+    playload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     next(new TokenError('Неверный токен'));
     return;
@@ -28,4 +30,5 @@ const auth = (req, res, next) => {
   req.user = playload;
   next();
 };
+
 module.exports = auth;

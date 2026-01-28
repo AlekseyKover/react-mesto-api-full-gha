@@ -8,6 +8,8 @@ const ErrorNotFound = require('../errors/ErrorNotFound');
 const TokenError = require('../errors/TokenError');
 const RegisterError = require('../errors/RegisterError');
 
+const { JWT_SECRET = 'dev-secret' } = process.env;
+
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => { res.send(users); })
@@ -61,7 +63,7 @@ const login = (req, res, next) => {
           if (isValidUser) {
             const jwt = jsonwebtoken.sign({
               _id: user._id,
-            }, 'SECRET');
+            }, JWT_SECRET);
             const isProduction = process.env.NODE_ENV === 'production';
             res.cookie('jwt', jwt, {
               maxAge: 3600000 * 24 * 7,
