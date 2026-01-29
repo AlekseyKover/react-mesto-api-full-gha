@@ -1,9 +1,10 @@
 .login__container {
-   margin: 50px, auto, 112px;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   
+  margin: 50px auto 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 358px;
 }
 
 @media screen and (max-width:900px) {

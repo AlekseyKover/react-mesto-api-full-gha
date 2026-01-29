@@ -1,5 +1,5 @@
-.login__form{
-display: flex;
-flex-direction: column;
-
+.login__form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

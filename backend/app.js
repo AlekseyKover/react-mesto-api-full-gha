@@ -47,7 +47,7 @@ mongoose.connect(mongoUrl)
   .catch((err) => {
     // eslint-disable-next-line no-console
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
+    // Не падаем целиком, чтобы сервис на Render продолжал отвечать.
   });
 
 const app = express();

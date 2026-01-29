@@ -29,7 +29,6 @@ function App() {
   const [cards, setCards] = useState([]);
   const [email, setEmail] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [registered, setRegistered] = useState(false);
   const [isInfoTooltipPopupOpen, setInfoTooltipPopupOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -45,8 +44,22 @@ function App() {
 
         navigate("/", { replace: true });
       })
-      .catch((error) => {
-        console.log(`Ошибка: ${error}`);
+      .catch((err) => {
+        let message = err.message || "Что-то пошло не так! Попробуйте ещё раз.";
+
+        if (
+          message === "Ошибка: 401" ||
+          message === "Ошибка: 403" ||
+          message === "Неверные данные"
+        ) {
+          message = "Неверный логин или пароль";
+        }
+
+        setInfoTooltiptext(message);
+        setIsSuccess(false);
+        setInfoTooltipPopupOpen(true);
+        // eslint-disable-next-line no-console
+        console.error("Ошибка авторизации:", err);
       });
   }
 
@@ -55,19 +68,20 @@ function App() {
       .register(email, password)
       .then((res) => {
         if (res && res.data) {
-          setInfoTooltiptext('Вы успешно зарегистрировались!')
+          setInfoTooltiptext("Вы успешно зарегистрировались!");
           setIsSuccess(true);
           setInfoTooltipPopupOpen(true);
-          setRegistered(true);
           navigate("/signin", { replace: true });
         }
       })
       .catch((err) => {
-        setInfoTooltiptext(err.message || 'Что-то пошло не так! Попробуйте ещё раз.')
+        setInfoTooltiptext(
+          err.message || "Что-то пошло не так! Попробуйте ещё раз."
+        );
         setIsSuccess(false);
         setInfoTooltipPopupOpen(true);
-        setRegistered(false);
-        console.error('Ошибка регистрации:', err);
+        // eslint-disable-next-line no-console
+        console.error("Ошибка регистрации:", err);
       });
   }
 
@@ -330,7 +344,7 @@ function App() {
             isOpen={isInfoTooltipPopupOpen}
             title={infoTooltiptext}
             onClose={closeAllPopups}
-            image={registered ? oks : fail}
+            image={isSuccess ? oks : fail}
           />
           <ImagePopup
             isOpen={isCardPopupOpen}
